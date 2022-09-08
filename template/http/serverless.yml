@@ -1,4 +1,4 @@
-service: app
+service: APP_NAME
 
 provider:
     name: aws

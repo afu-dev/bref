@@ -50,16 +50,20 @@ final class Init extends Command
         ][$choice];
 
         $fs = new Filesystem;
-        $rootPath = dirname(__DIR__, 3) . "/template/$templateDirectory";
+        $rootPath = dirname(__DIR__, 3);
+        $templatePath = $rootPath . "/template/$templateDirectory";
+        $projectPath = dirname($rootPath, 3);
 
         $io->writeln('Creating index.php');
-        $fs->copy("$rootPath/index.php", 'index.php');
+        $fs->copy("$templatePath/index.php", 'index.php');
 
         $io->writeln('Creating serverless.yml');
 
-        $template = file_get_contents("$rootPath/serverless.yml");
+        $appName = str_replace(" ", "-", strtolower(basename($projectPath)));
 
+        $template = file_get_contents("$templatePath/serverless.yml");
         $template = str_replace('PHP_VERSION', PHP_MAJOR_VERSION . PHP_MINOR_VERSION, $template);
+        $template = str_replace('APP_NAME', $appName, $template);
 
         file_put_contents('serverless.yml', $template);
 
